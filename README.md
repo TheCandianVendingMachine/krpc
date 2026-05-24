@@ -14,12 +14,6 @@ the game, and comes with client libraries for many popular languages.
 
 Contributions to kRPC are very welcome. [Please refer to this guide.](Contributing.md)
 
-## KSP2
-
-~kRPC is coming to KSP2!~ Notice: I am not actively developing this, due to lack of time. If you would like to contribute PRs or take over the project please get in touch on Discord.
-
-You can find it in the new kRPC2 repository here: https://github.com/krpc/krpc2
-
 ## Links for Developers
 
  * [Development Guide](Development-Guide.md) for information on the project structure, compiling the code and the various tools.
