@@ -38,9 +38,9 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
+        uses: thecandianvendingmachine/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
       - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
         with:
           game: ksp
           version: 1.12.5
@@ -52,17 +52,17 @@ jobs:
             //tools/krpctools \
             //tools/TestServer:archive
       - name: upload-krpc-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
         with:
           name: krpc
           path: bazel-bin/krpc-*.zip
       - name: upload-krpctools-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
         with:
           name: krpctools
           path: bazel-bin/tools/krpctools/krpctools-*.zip
       - name: upload-testserver-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
         with:
           name: testserver
           path: bazel-bin/tools/TestServer/TestServer-*.zip
@@ -81,16 +81,16 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
+        uses: thecandianvendingmachine/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
       - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
         with:
           game: ksp
           version: 1.12.5
       - name: build
         run: tools/dist/genfiles.sh
       - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
         with:
           name: genfiles
           path: bazel-bin/krpc-genfiles-*.zip
@@ -110,9 +110,9 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
+        uses: thecandianvendingmachine/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
       - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
         with:
           game: ksp
           version: 1.12.5
@@ -143,16 +143,16 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
+        uses: thecandianvendingmachine/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
       - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
         with:
           game: ksp
           version: 1.12.5
       - name: build
         run: bazel build //doc:html
       - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
         with:
           name: docs-html
           path: bazel-bin/doc/html.zip
@@ -171,16 +171,16 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
+        uses: thecandianvendingmachine/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
       - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
         with:
           game: ksp
           version: 1.12.5
       - name: build
         run: bazel build //doc:pdf
       - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
         with:
           name: docs-pdf
           path: bazel-bin/doc/krpc-*.pdf
@@ -199,9 +199,9 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
+        uses: thecandianvendingmachine/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
       - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
         with:
           game: ksp
           version: 1.12.5
@@ -222,9 +222,9 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
+        uses: thecandianvendingmachine/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
       - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
         with:
           game: ksp
           version: 1.12.5
@@ -245,9 +245,9 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
+        uses: thecandianvendingmachine/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
       - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
         with:
           game: ksp
           version: 1.12.5
@@ -268,9 +268,9 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
+        uses: thecandianvendingmachine/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
       - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
         with:
           game: ksp
           version: 1.12.5
@@ -281,7 +281,7 @@ jobs:
       - name: test-build
         run: client/cnano/test-build.sh
       - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
         with:
           name: client-cnano
           path: bazel-bin/client/cnano/krpc-cnano-*.zip
@@ -300,9 +300,9 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
+        uses: thecandianvendingmachine/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
       - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
         with:
           game: ksp
           version: 1.12.5
@@ -313,7 +313,7 @@ jobs:
       - name: test-build
         run: client/cpp/test-build.sh
       - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
         with:
           name: client-cpp
           path: bazel-bin/client/cpp/krpc-cpp-*.zip
@@ -332,9 +332,9 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
+        uses: thecandianvendingmachine/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
       - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
         with:
           game: ksp
           version: 1.12.5
@@ -343,12 +343,12 @@ jobs:
       - name: test
         run: bazel test //client/csharp:test
       - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
         with:
           name: client-csharp-zip
           path: bazel-bin/client/csharp/krpc-csharp-*.zip
       - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
         with:
           name: client-csharp-nupkg
           path: bazel-bin/client/csharp/KRPC.Client.*.nupkg
@@ -367,9 +367,9 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
+        uses: thecandianvendingmachine/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
       - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
         with:
           game: ksp
           version: 1.12.5
@@ -378,7 +378,7 @@ jobs:
       - name: test
         run: bazel test //client/java:test
       - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
         with:
           name: client-java
           path: bazel-bin/client/java/krpc-java-*.jar
@@ -397,9 +397,9 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
+        uses: thecandianvendingmachine/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
       - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
         with:
           game: ksp
           version: 1.12.5
@@ -408,7 +408,7 @@ jobs:
       - name: test
         run: bazel test //client/python:test
       - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
         with:
           name: client-python
           path: bazel-bin/client/python/krpc-python-*.zip
@@ -427,9 +427,9 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
+        uses: thecandianvendingmachine/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
       - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
         with:
           game: ksp
           version: 1.12.5
@@ -438,7 +438,7 @@ jobs:
       - name: test
         run: bazel test //client/lua:test
       - name: upload-artifact
-        uses: krpc/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/upload-artifact@action-upload-artifact-v1
         with:
           name: client-lua
           path: bazel-bin/client/lua/krpc-lua-*.zip
@@ -457,9 +457,9 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
+        uses: thecandianvendingmachine/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
       - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
         with:
           game: ksp
           version: 1.12.5
@@ -480,9 +480,9 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
+        uses: thecandianvendingmachine/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
       - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
         with:
           game: ksp
           version: 1.12.5
@@ -503,9 +503,9 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: fetch
-        uses: krpc/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
+        uses: thecandianvendingmachine/krpc-core/.github/actions/bazel-fetch@action-bazel-fetch-v2
       - name: ksp-lib
-        uses: krpc/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
+        uses: thecandianvendingmachine/krpc-core/.github/actions/ksp-lib@action-ksp-lib-v1
         with:
           game: ksp
           version: 1.12.5
