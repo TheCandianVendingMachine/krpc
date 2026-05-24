@@ -15,8 +15,8 @@ From PowerShell, in the repository root:
 
 ```powershell
 # Option A — pull the published image
-docker pull ghcr.io/krpc/buildenv:latest
-docker run --rm -it -v "${PWD}:/build/krpc" -w /build/krpc ghcr.io/krpc/buildenv:latest bash
+docker pull ghcr.io/thecandianvendingmachine/krpc-buildenv:latest 
+docker run --rm -it -v "${PWD}:/build/krpc" -w /build/krpc ghcr.io/thecandianvendingmachine/krpc-buildenv:latest bash
 
 # Option B — build the image locally from the Dockerfile in this repo
 docker build -t krpc-buildenv .

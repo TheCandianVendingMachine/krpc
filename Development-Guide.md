@@ -62,7 +62,7 @@ longer supported.
 You can either pull the pre-built image from GHCR:
 
 ```
-docker pull ghcr.io/krpc/buildenv:latest
+docker pull ghcr.io/thecandianvendingmachine/krpc-buildenv:4.0.0
 ```
 
 …or build it locally from the `Dockerfile` in the repository root:
@@ -99,7 +99,7 @@ docker run --rm -it -v "$(pwd):/build/krpc" -w /build/krpc krpc-buildenv bash
 docker run --rm -it -v "${PWD}:/build/krpc" -w /build/krpc krpc-buildenv bash
 ```
 
-(Substitute `ghcr.io/krpc/buildenv:latest` for `krpc-buildenv` if you pulled the published image
+(Substitute `ghcr.io/thecandianvendingmachine/krpc-buildenv:4.0.0` for `krpc-buildenv` if you pulled the published image
 instead of building locally.)
 
 Inside the container, build everything and run the tests with:
