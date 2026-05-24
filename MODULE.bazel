@@ -300,6 +300,7 @@ filegroup(
 
 maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
 maven.install(
+    lock_file = "//:maven_install.json",
     artifacts = [
         "com.google.protobuf:protobuf-java:3.22.0",
         "junit:junit:4.12",
@@ -315,6 +316,7 @@ maven.install(
         "org.javatuples:javatuples:1.2",
     ],
     repositories = [
+        "https://maven-central.storage-download.googleapis.com/maven2",
         "https://repo1.maven.apache.org/maven2",
     ],
 )
