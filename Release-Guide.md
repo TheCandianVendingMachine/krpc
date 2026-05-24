@@ -2,6 +2,10 @@
 
 This document details the steps necessary to make a release of kRPC.
 
+All `bazel` and `tools/...` commands below are expected to be run inside the `buildenv` Docker image
+(see [Development-Guide.md](Development-Guide.md#compiling) for how to start it). Building on the
+host directly is not supported.
+
 1. The repository should be clean from changes. Also run a `bazel clean --expunge`.
 1. Bump the kRPC version number in `config.bzl` and commit the file.
 1. Make an annotated tag for the new version (using `git tag -a vx.x.x) and move the latest-version

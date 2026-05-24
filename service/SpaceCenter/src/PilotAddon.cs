@@ -357,8 +357,6 @@ namespace KRPC.SpaceCenter
                 return;
             if (FlightGlobals.ActiveVessel != vessel)
                 return;
-            if (RemoteTech.IsAvailable && !(RemoteTech.HasLocalControl (vessel.id) || RemoteTech.HasAnyConnection (vessel.id)))
-                return;
             FlightInputHandler.state.mainThrottle = inputs.Throttle;
             inputs.Throttle = 0f;
             inputs.ThrottleUpdated = false;

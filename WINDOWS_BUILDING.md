@@ -1,42 +1,53 @@
-# These instructions are likely out of date. We are working on better build instructions for Windows
+# Building kRPC on Windows
 
-Note: Tested with Windows 10 2004 using WSL 2
+kRPC is built exclusively through the `buildenv` Docker image. There is no longer a separate WSL +
+Mono + apt setup procedure for Windows — Docker Desktop is the only supported path.
 
-1) git clone https://github.com/krpc/krpc (or your own fork) to a folder in Windows. This folder from now on will be called `/krpc`
-2) Install Ubuntu 22.04 from Microsoft Store
-3) Open Ubuntu
-4) run the following to prevent conflicts with Windows
-```
-echo "[interop]
-appendWindowsPath = false" | sudo tee -a /etc/wsl.conf
-```
-5) run `exit` and in a command prompt run `wsl --shutdown`.
-6) Open Ubuntu
-7) Install bazelisk by following this [link](https://bazel.build/install/bazelisk).
-8) Add the mono repository from [here](https://www.mono-project.com/download/stable/#download-lin-ubuntu).
-9) Run command (note: This is about 1.5GB download)
-```
-sudo apt-get install mono-complete python-setuptools  \
-python-dev-is-python3 autoconf libtool luarocks maven texlive-latex-base \
-texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra \
-libxml2-dev libxslt1-dev librsvg2-bin python3-dev python3-setuptools \
-python3-virtualenv latexmk openjdk-8-jdk libenchant-2-2
-```
-10) cd to `/krpc` in Ubuntu (ex. `/mnt/d/source/repos/krpc` but yours is probably different)
-11) Using Windows administrator command prompt, cd `/krpc/lib`
-12) Run `mklink /D ksp {Kerbal_Space_Program_Directory}`
-13) cd to `/krpc/lib/ksp`
-14) Run `mklink /D KSP_Data .\KSP_x64_Data`
-15) cd to `/krpc/lib` in Ubuntu.
-16) Run `ln -s /usr/lib/mono/4.5 mono-4.5`
-17) cd to `/krpc`
-18) Build using `bazel build //:krpc`
+## Prerequisites
 
-To get build output in Windows, and enable Visual Studio to find all the libraries:
-1) Run `wsl -l` in command prompt. Find the entry that doesn't have docker in its name. This will be refered to as `Distro`
-2) cd to `/krpc/bazel-bin` in Ubuntu
-3) Run `pwd -P` and copy the result to clipboard. This will be refered to as `OutputPath`
-4) cd to `/krpc` in Windows
-5) Run `mklink /D build-out "\\wsl$\{Distro goes here}/{Paste OutputPath here}"`
-6) Build output is now in `build-out` in repository root
-## Special thanks to Tamer1an, Enroy, and jh0ker for helping me figure this all out.
+1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) for Windows. The WSL 2
+   backend is recommended.
+2. Clone this repository to a folder of your choice, for example `C:\Dev\krpc`.
+
+## Build
+
+From PowerShell, in the repository root:
+
+```powershell
+# Option A — pull the published image
+docker pull ghcr.io/krpc/buildenv:latest
+docker run --rm -it -v "${PWD}:/build/krpc" -w /build/krpc ghcr.io/krpc/buildenv:latest bash
+
+# Option B — build the image locally from the Dockerfile in this repo
+docker build -t krpc-buildenv .
+docker run --rm -it -v "${PWD}:/build/krpc" -w /build/krpc krpc-buildenv bash
+```
+
+Note: the `"${PWD}:/build/krpc"` argument **must** be quoted as a single string. Without the outer
+quotes, PowerShell mis-tokenizes the colon between the Windows drive path and the container
+target, and `docker run` errors with `invalid reference format`.
+
+Inside the container:
+
+```bash
+bazel build //...
+bazel test //:test
+```
+
+The `lib/ksp` (KSP stub DLLs) and `lib/mono-4.5` symlinks expected by the build are already set up
+inside the image, so no Windows-side symlinking or admin command prompt is needed.
+
+## Build output on the Windows host
+
+Because the repository is bind-mounted into the container, Bazel's `bazel-bin`, `bazel-out` and
+`bazel-testlogs` symlinks appear in your Windows working copy as soon as the build completes. Open
+them from Windows directly — no `mklink` to `\\wsl$\...` required.
+
+## Notes
+
+* Do not install Bazel, Mono, Java, LaTeX, etc. on the Windows host or in WSL. The Docker image owns
+  the entire toolchain.
+* Visual Studio is not part of the supported build flow. Use the Docker container for compiling and
+  testing; use VS only as an editor if desired.
+* For full project context (code layout, tools, Bazel cheat sheet), see
+  [Development-Guide.md](Development-Guide.md).

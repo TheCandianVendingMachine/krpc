@@ -46,138 +46,76 @@ The codebase is structured as follows:
 
 ## Compiling
 
-kRPC uses the [Bazel build system](https://bazel.io>). This provides us with fast, repeatable
-builds, and support for many languages. (See below for a Bazel cheat sheet.)
+kRPC is built exclusively inside a Docker image — `buildenv` — that has Bazel, Mono, the KSP stub
+DLLs and every other build/test dependency pre-installed. The repository's `Dockerfile` defines this
+image. Building on the host directly (with locally-installed Bazel, Mono, apt packages, etc.) is no
+longer supported.
 
-Note: we don't currently support building on Windows, although this is something we are working
-on. However, you can build the C# projects on Windows. See the section below named "Building the C#
-projects using an IDE". You can also build the project using a docker container running on
-Windows. See the section below named "Building using Docker".
+### Prerequisites
 
-### Setting up your Environment
+ * [Docker](https://docs.docker.com/get-docker/) installed on your machine (Linux, macOS or Windows
+   with Docker Desktop).
+ * A local clone of this repository.
 
-The Bazel build scripts will automatically download most of the required dependencies to build the
-project, but the following needs to be installed on your system:
+### Get the build image
 
- * Bazel
- * C# compiler, runtime and tools (for example [Mono](https://www.mono-project.com/))
- * Python 3.7+
- * Autotools
- * LuaRocks
- * Maven
- * pdflatex and svg tools (for building the documentation)
+You can either pull the pre-built image from GHCR:
 
-On Ubuntu, these can be installed via apt as follows:
- * First follow the instructions on [Mono's website](http://www.mono-project.com/download) to add
-   their apt repository.
- * Then run the following command:
-   ```
-   sudo apt-get install mono-complete python-is-python3 python3-dev python3-setuptools \
-     python3-virtualenv autoconf libtool luarocks maven latexmk texlive-latex-base \
-     texlive-latex-recommended texlive-fonts-recommended texlive-latex-extra texlive-fonts-extra \
-     tex-gyre libxml2-dev libxslt1-dev librsvg2-bin libenchant-2-2 build-essential make
-   ```
-
-You also need to set up the necessary libraries in the `lib` diretory:
- * `lib/ksp` should contain a copy of the game. You can either create this directory, and copy the
-   game files into it, or create a symlink to point to an existing copy of the game. For example,
-   run the following command from the root of the krpc source to point to KSP installed in the
-   default Steam location:
-   ```ln -s "$HOME/.local/share/Steam/steamapps/common/Kerbal Space Program" ksp lib/ksp```
-
-You may also need to modify the symlink at `lib/mono-4.5` to point to the correct location of your
-Mono installation. On Ubuntu 22.04 with the latest version of Mono, `lib/mono-4.5` should be a
-symlink pointing to `/usr/lib/mono/4.5`
-
-### Building using Bazel
-
-To build the kRPC mod release archive, containing the server DLL and service DLLs, run `bazel build
-//:krpc`. The resulting archive containing the GameData directory will be created at
-`bazel-out/krpc-<version>.zip`
-
-The build scripts define various "targets" that can be used to build different parts of the project,
-by running `bazel build <target>` These targets are available:
-
- * `//server` - builds the server plugin and associated files
- * Client libraries:
-   * `//client/csharp`
-   * `//client/cpp`
-   * `//client/java`
-   * `//client/lua`
-   * `//client/python`
-   * `//client/python:python-base` - builds the python client, without pre-generated stubs
- * Services
-   * `//service/SpaceCenter`
-   * `//service/Drawing`
-   * `//service/UI`
-   * `//service/InfernalRobotics`
-   * `//service/KerbalAlarmClock`
-   * `//service/RemoteTech`
- * Protobuf definitions:
-   * `//protobuf:csharp`
-   * `//protobuf:cpp`
-   * `//protobuf:java`
-   * `//protobuf:lua`
-   * `//protobuf:python`
- * Documentation:
-   * `//doc:html`
-   * `//doc:pdf`
-
-### Building the C# projects using an IDE
-
-A C# solution file (`kRPC.sln`) is provided in the root of the project for use with Visual Studio,
-MonoDevelop or a similar C# IDE.
-
-Before it can be used, some generated C# source files need to be built using the Bazel build
-scripts. This can be done by running `bazel build //:csproj`
-
-Alternatively, if you are unable to run Bazel to build these files (for example on Windows), you can
-get a copy of these files from the "genfiles" archive on the [GitHub releases
-page](https://github.com/krpc/krpc/releases). Download the latest `krpc-genfiles-<version>.zip` and
-extract the archive over your copy of the source. This should give you a `bazel-bin` and
-`bazel-krpc` directory containing all the necessary files.
-
-### Building using Docker
-
-A docker image called `buildenv` is also provided with the necessary build environment already set
-up. It can be used to build the entire project.
-
-Pull the image using:
 ```
 docker pull ghcr.io/krpc/buildenv:latest
 ```
 
-Then run a container using:
-```
-docker run -it ghcr.io/krpc/buildenv:latest
-```
-
-This will drop you into a command line. Next you need to get the KSP DLLs using the following
-commands:
+…or build it locally from the `Dockerfile` in the repository root:
 
 ```
-mkdir ksp
-pushd ksp
-wget https://github.com/krpc/ksp-lib/raw/main/ksp/ksp-1.12.5.zip
-unzip ksp-1.12.5.zip
-popd
+docker build -t krpc-buildenv .
 ```
 
-Note: these KSP DLLs are downloaded from the ksp-lib repository. These DLLs have had their
-implementation stripped out. This is sufficient to build the code, without needing to publicly
-distribute the original KSP DLLs.
-
-You can then clone the repository, set up some symlinks to the libraries, build everything and run
-the tests, using the following commands:
+The image runs as a non-root `builder` user (UID/GID 1000) — `rules_python`'s hermetic
+interpreter refuses to run as root. On a Linux host where you want bind-mounted files to be owned
+by your shell user, pass your own UID/GID at build time:
 
 ```
-git clone https://github.com/krpc/krpc.git
-cd krpc
-ln -s `pwd`/../ksp lib/ksp
-ln -s /usr/lib/mono/4.5 lib/mono-4.5
+docker build --build-arg USER_UID=$(id -u) --build-arg USER_GID=$(id -g) -t krpc-buildenv .
+```
+
+On Docker Desktop (macOS/Windows) the defaults are fine.
+
+Note: the image bundles KSP "stub" DLLs from the
+[ksp-lib repository](https://github.com/krpc/ksp-lib). These DLLs have their implementation stripped
+out, which is enough to compile the code without redistributing the original KSP DLLs.
+
+### Build and test
+
+Run the image, mounting your working copy of the repository over the baked-in source so your edits
+are picked up. Quote the whole `host:container` argument as one string so colons in Windows drive
+paths don't confuse the parser:
+
+```
+# Linux / macOS / WSL / Git Bash
+docker run --rm -it -v "$(pwd):/build/krpc" -w /build/krpc krpc-buildenv bash
+
+# Windows PowerShell
+docker run --rm -it -v "${PWD}:/build/krpc" -w /build/krpc krpc-buildenv bash
+```
+
+(Substitute `ghcr.io/krpc/buildenv:latest` for `krpc-buildenv` if you pulled the published image
+instead of building locally.)
+
+Inside the container, build everything and run the tests with:
+
+```
 bazel build //...
 bazel test //:test
 ```
+
+The `lib/ksp` and `lib/mono-4.5` symlinks expected by the build are already set up inside the image.
+
+#### Windows note
+
+On Windows, use Docker Desktop with the WSL2 backend and run the commands above from PowerShell or
+WSL. Replace `"$PWD"` with `${PWD}` (PowerShell) or `$(pwd)` (WSL/Git Bash). No host-side Bazel,
+Mono or apt setup is required.
 
 ## Tools
 
@@ -199,19 +137,12 @@ Included in the project are various tools to aid development.
 kRPC contains a suite of tests for the server plugin, services, client libraries and other parts of
 the project.
 
-To run the tests, the following dependencies need to be installed. Without them, some of the tests
-will fail.
+The `buildenv` Docker image already includes all test dependencies (Python 3 dev files, CppCheck,
+socat, etc.), so no extra setup is required. From inside the container, run the unit tests with:
 
- * Python 3.7+ development files
- * CppCheck
- * socat
-
-To install these dependencies via apt on Ubuntu run the following command:
 ```
-sudo apt-get install cppcheck socat
+bazel test //:test
 ```
-
-The unit tests can be run using: `bazel test //:test`
 
 Note: these tests do not require the game to be running. They test the various components without
 using the game. For communication tests, a tool called "TestServer" is used. This runs a version of

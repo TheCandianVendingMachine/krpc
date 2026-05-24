@@ -51,7 +51,7 @@ def _impl(ctx):
     sub_commands.extend([
         "CWD=`pwd`",
         "cd %s" % staging_dir,
-        "(cd %s; autoreconf --force --install --warnings=error 2>/dev/null 1>&2)" % source_dir,
+        "(cd %s; autoreconf --force --install --warnings=error)" % source_dir,
         "rm -rf %s/autom4te.cache" % source_dir,
         "zip --quiet -r $CWD/%s ./" % output.path,
     ])
