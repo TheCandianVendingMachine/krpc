@@ -71,9 +71,10 @@ docker pull ghcr.io/thecandianvendingmachine/krpc-buildenv:4.0.0
 docker build -t krpc-buildenv .
 ```
 
-The image runs as a non-root `builder` user (UID/GID 1000) — `rules_python`'s hermetic
-interpreter refuses to run as root. On a Linux host where you want bind-mounted files to be owned
-by your shell user, pass your own UID/GID at build time:
+The image runs as a non-root `runner` user (UID/GID 1001) — `rules_python`'s hermetic interpreter
+refuses to run as root, and the name + UID line up with GitHub-hosted Ubuntu runners, which is what
+CI uses (`--user runner:runner`). On a Linux host where you want bind-mounted files to be owned by
+your shell user, pass your own UID/GID at build time:
 
 ```
 docker build --build-arg USER_UID=$(id -u) --build-arg USER_GID=$(id -g) -t krpc-buildenv .

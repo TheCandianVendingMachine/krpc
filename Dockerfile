@@ -85,15 +85,20 @@ RUN curl -fsSL -o /usr/local/bin/bazel \
 # ── 5. Non-root build user ───────────────────────────────────────────────────
 # rules_python's hermetic interpreter refuses to run as root, so every
 # subsequent Bazel step (and the default CMD) runs as a dedicated user.
-# UID/GID default to 1000 but can be overridden at build time so bind-mounted
-# repos on Linux hosts get matching ownership:
+#
+# The user is named `runner` with UID/GID 1001 to match GitHub-hosted Ubuntu
+# runners — the CI workflow uses `--user runner:runner`, and a matching UID
+# means bind-mounted workspace files have correct ownership.
+#
+# Override the UID/GID at build time if your Linux host shell user has a
+# different UID and you want bind-mounted ownership to line up:
 #   docker build --build-arg USER_UID=$(id -u) --build-arg USER_GID=$(id -g) ...
-ARG USER_UID=1000
-ARG USER_GID=1000
-RUN groupadd --gid ${USER_GID} builder \
-  && useradd --uid ${USER_UID} --gid ${USER_GID} --create-home --shell /bin/bash builder \
+ARG USER_UID=1001
+ARG USER_GID=1001
+RUN groupadd --gid ${USER_GID} runner \
+  && useradd --uid ${USER_UID} --gid ${USER_GID} --create-home --shell /bin/bash runner \
   && mkdir -p /build \
-  && chown -R builder:builder /build
+  && chown -R runner:runner /build
 
 # Entrypoint: recreate lib/{ksp,mono-4.5} symlinks at container start so they
 # survive a bind-mount of the host repo over /build/krpc (both names are
@@ -102,7 +107,7 @@ COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN sed -i 's/\r$//' /usr/local/bin/docker-entrypoint.sh \
   && chmod +x /usr/local/bin/docker-entrypoint.sh
 
-USER builder
+USER runner
 
 # ── 6. KSP stub DLLs ─────────────────────────────────────────────────────────
 # Download the implementation-stripped KSP DLLs from the ksp-lib repo.

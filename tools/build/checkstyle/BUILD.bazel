@@ -3,14 +3,14 @@ java_binary(
     main_class = "com.puppycrawl.tools.checkstyle.Main",
     visibility = ["//visibility:public"],
     runtime_deps = [
-        "@java_antlr2//jar",
-        "@java_antlr4_runtime//jar",
-        "@java_apache_commons_beanutils//jar",
-        "@java_apache_commons_cli//jar",
-        "@java_apache_commons_collections//jar",
-        "@java_apache_commons_logging//jar",
-        "@java_checkstyle//jar",
-        "@java_guava//jar",
+        "@maven//:antlr_antlr",
+        "@maven//:org_antlr_antlr4_runtime",
+        "@maven//:commons_beanutils_commons_beanutils",
+        "@maven//:commons_cli_commons_cli",
+        "@maven//:commons_collections_commons_collections",
+        "@maven//:commons_logging_commons_logging",
+        "@maven//:com_puppycrawl_tools_checkstyle",
+        "@maven//:com_google_guava_guava",
     ],
 )
 
